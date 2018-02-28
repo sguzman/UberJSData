@@ -1,5 +1,5 @@
 # [ScalaJSData](https://github.com/sguzman/ScalaJSData)
-A Scala wrapper library for interacting with UCSB GOLD portal
+A continuous integration server written in Scala that dowloads Uber pick up data and publishes it as JS file
 
 ![A scala project](https://i.imgur.com/vBOMoBu.png)
 
