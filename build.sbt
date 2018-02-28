@@ -1,3 +1,5 @@
+enablePlugins(AppenginePlugin)
+
 /** Name of project */
 name := "ScalaJSData"
 
@@ -32,7 +34,9 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-core" % "0.9.0-M2",
   "io.circe" %% "circe-generic" % "0.9.0-M2",
   "io.circe" %% "circe-parser" % "0.9.0-M2",
-  "org.http4s" % "http4s-dsl_2.12" % "0.18.1",
+  "com.typesafe.akka" % "akka-http" % "3.0.0-RC1",
+  "com.typesafe.akka" %% "akka-stream" % "2.5.11",
+  "org.mortbay.jetty" % "jetty" % "6.1.22" % "container"
   "org.scalaj" %% "scalaj-http" % "2.3.0"
 )
 
