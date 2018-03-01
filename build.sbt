@@ -1,5 +1,3 @@
-enablePlugins(AppenginePlugin)
-
 /** Name of project */
 name := "ScalaJSData"
 
@@ -34,11 +32,12 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-core" % "0.9.0-M2",
   "io.circe" %% "circe-generic" % "0.9.0-M2",
   "io.circe" %% "circe-parser" % "0.9.0-M2",
-  "com.typesafe.akka" % "akka-http" % "3.0.0-RC1",
-  "com.typesafe.akka" %% "akka-stream" % "2.5.11",
-  "org.mortbay.jetty" % "jetty" % "6.1.22" % "container"
-  "org.scalaj" %% "scalaj-http" % "2.3.0"
+  "org.scalaj" %% "scalaj-http" % "2.3.0",
+  "org.http4s" %% "http4s-dsl" % "0.18.1",
+  "org.http4s" %% "http4s-blaze-server" % "0.18.1"
 )
 
 /** Make sure to fork on run */
 fork in run := true
+
+herokuFatJar in Compile := Some((assemblyOutputPath in assembly).value)
