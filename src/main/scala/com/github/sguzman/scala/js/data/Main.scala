@@ -1,30 +1,22 @@
 package com.github.sguzman.scala.js.data
 
-import cats.effect._
-import org.http4s._
-import org.http4s.dsl.io._
-import org.http4s.server.blaze.BlazeBuilder
+import lol.http._
 
-import scala.io.StdIn
 import scala.util.{Failure, Success}
+import scala.concurrent.ExecutionContext.Implicits.global
 
 object Main {
   def main(args: Array[String]): Unit = {
-    val port = scala.util.Try(System.getenv("PORT").toInt) match {
+    val port = util.Try(System.getenv("PORT").toInt) match {
       case Success(v) => v
-      case Failure(e) => 8080
+      case Failure(e) => 8888
     }
 
-    val builder = BlazeBuilder[IO]
-      .bindHttp(port, "localhost")
-      .mountService(
-        HttpService[IO] {
-          case GET -> Root =>
-            Ok("Hello")
-        }, "/hello")
-      .start
+    Server.listen(port)(handle)
+  }
 
-    val server = builder.unsafeRunSync()
-    StdIn.readLine
+  def handle(e: Request) = e.path match {
+    case "/hello" => Ok("Hello :-)")
+    case _ => NotFound("404 :-(")
   }
 }
