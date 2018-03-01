@@ -6,11 +6,17 @@ import org.http4s.dsl.io._
 import org.http4s.server.blaze.BlazeBuilder
 
 import scala.io.StdIn
+import scala.util.{Failure, Success}
 
 object Main {
   def main(args: Array[String]): Unit = {
+    val port = scala.util.Try(System.getenv("PORT").toInt) match {
+      case Success(v) => v
+      case Failure(e) => 8080
+    }
+
     val builder = BlazeBuilder[IO]
-      .bindHttp(8080, "localhost")
+      .bindHttp(port, "localhost")
       .mountService(
         HttpService[IO] {
           case GET -> Root =>
