@@ -33,6 +33,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic" % "0.9.0-M2",
   "io.circe" %% "circe-parser" % "0.9.0-M2",
   "org.scalaj" %% "scalaj-http" % "2.3.0",
+  "com.criteo.lolhttp" % "lolhttp_2.12" % "0.9.3"
 )
 
 /** Make sure to fork on run */
