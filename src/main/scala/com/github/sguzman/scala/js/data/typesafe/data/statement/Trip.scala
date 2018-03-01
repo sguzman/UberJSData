@@ -8,7 +8,7 @@ case class Trip(
                marketplace: String,
                join_and_support_eligible: Boolean,
                is_star_power: Boolean,
-               uber_fee: String,
+               uber_fee: Option[String],
                total_earned: String,
                `type`: String,
                cash_collected: String,
