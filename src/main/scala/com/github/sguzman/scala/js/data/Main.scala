@@ -1,39 +1,47 @@
 package com.github.sguzman.scala.js.data
 
-import lol.http._
+import akka.actor.ActorSystem
+import akka.http.scaladsl.Http
+import akka.http.scaladsl.model.{ContentTypes, HttpEntity}
+import akka.http.scaladsl.server.Directives._
+import akka.stream.ActorMaterializer
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+import scala.io.StdIn
 import scala.util.{Failure, Success}
 
 object Main {
-  var js = "..."
+  var js = "{}"
 
-  def dl = {
-    def download(idx: Int = 0): Unit = {
-      println(s"Downloading $idx")
-      js = Items.js
-      println(s"Finished $idx")
-      Thread.sleep(86400000)
-      download(idx + 1)
+  def main(args: Array[String]): Unit = {
+    implicit val system = ActorSystem("my-system")
+    implicit val materializer = ActorMaterializer()
+    implicit val executionContext = system.dispatcher
+
+    Future {
+      println("Downloading")
+      Items.js
+    }.onComplete {t =>
+      js = t match {
+        case Success(v) => v
+        case Failure(e) => throw e
+      }
+      println("Done")
     }
 
-    download()
+    println(s"Server online at http://localhost:8080/\nPress RETURN to stop...")
+    StdIn.readLine() // let it run until user presses return
+
+    Http().bindAndHandle(path("js") {
+        get {
+          complete(HttpEntity(ContentTypes.`application/json`, js))
+        }
+      }, "localhost",
+      util.Try(System.getenv("PORT").toInt) match {
+        case Success(v) => v
+        case Failure(_) => 8080
+      })
+      .flatMap(_.unbind()) // trigger unbinding from the port
+      .onComplete(_ => system.terminate()) // and shutdown when done
   }
-
-  def server(port: Int) = Server.listen(port) {
-    case GET at "/js" =>
-      Ok(js)
-    case _ =>
-      NotFound
-  }
-
-  def start = server(util.Try(System.getenv("PORT").toInt) match {
-    case Success(v) => v
-    case Failure(_) => 8080
-  })
-
-  def main(args: Array[String]): Unit =
-    List[() => Unit](dl _, start _)
-      .par
-      .foreach(t => t.apply)
 }
