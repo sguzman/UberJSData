@@ -1,1 +1,0 @@
-web: java -jar target/heroku/app/target/scala-2.12.*jar
